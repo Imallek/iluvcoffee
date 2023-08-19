@@ -16,6 +16,9 @@ export class Coffee { // sql table generated for this would be lower-case classn
 
 
 	@JoinTable()
-	@ManyToMany(type => Flavor, (flavor) => flavor.coffees)
-	flavors: string[];
+	@ManyToMany(type => Flavor, (flavor) => flavor.coffees,
+		{
+			cascade: true
+		})
+	flavors: Flavor[];
 }
