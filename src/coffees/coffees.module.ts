@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CoffeesController } from './coffees.controller';
 import { Coffee } from './entities/coffee.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flavor } from './entities/flavor.entity';
 import { Event } from 'src/events/entities/event.entity/event.entity';
-import { COFFEE_BRANDS } from './coffees.constants';
+import { COFFEE_BRANDS, COFFEE_BRANDS2 } from './coffees.constants';
 
 class MockCoffeeService { }
 
@@ -14,27 +14,39 @@ class ConfigService { }
 class DevelopmentConfigService { }
 class ProductionConfigService { }
 
+@Injectable()
+export class CoffeeBrandsFactory {
+	create() {
+		return ['buddy brew', 'nescafe'];
+	}
+}
+
 @Module({
 	imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
-	providers: [{
+	providers: [CoffeeBrandsFactory, {
 		provide: CoffeesService,
 		useClass: CoffeesService,
 	},
-	/**
-	{
-		provide: CoffeesService,
-		useValue: new MockCoffeeService(),
-		// Now whenever the CoffeeService token is resolved, our MockCoffeeService class would be provided by Dependency injection
-	},
-	 */
-	{
-		provide: COFFEE_BRANDS,
-		useValue: ['buddy brew', 'nescafe']
-	},
-	{
-		provide: ConfigService,
-		useClass: process.env.NODE_ENV === 'development' ? DevelopmentConfigService : ProductionConfigService,
-	}
+		/**
+		{
+			provide: CoffeesService,
+			useValue: new MockCoffeeService(),
+			// Now whenever the CoffeeService token is resolved, our MockCoffeeService class would be provided by Dependency injection
+		},
+		 */
+		{
+			provide: COFFEE_BRANDS,
+			useValue: ['buddy brew', 'nescafe']
+		},
+		{
+			provide: ConfigService,
+			useClass: process.env.NODE_ENV === 'development' ? DevelopmentConfigService : ProductionConfigService,
+		},
+		{
+			provide: COFFEE_BRANDS2,
+			useFactory: (brandsFactory: CoffeeBrandsFactory) => brandsFactory.create(),
+			inject: [CoffeeBrandsFactory]
+		}
 	],
 	controllers: [CoffeesController],
 	exports: [CoffeesService]
