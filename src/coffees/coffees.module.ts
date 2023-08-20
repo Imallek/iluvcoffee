@@ -13,6 +13,7 @@ import { Event } from 'src/events/entities/event.entity/event.entity';
 		provide: CoffeesService,
 		useClass: CoffeesService,
 	}],
-	controllers: [CoffeesController]
+	controllers: [CoffeesController],
+	exports: [CoffeesService]
 })
 export class CoffeesModule { }
