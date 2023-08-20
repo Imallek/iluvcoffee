@@ -14,6 +14,8 @@ export class Coffee { // sql table generated for this would be lower-case classn
 	@Column()
 	brand: string;
 
+	@Column({ default: 0 })
+	recommendations: number;
 
 	@JoinTable()
 	@ManyToMany(type => Flavor, (flavor) => flavor.coffees,
