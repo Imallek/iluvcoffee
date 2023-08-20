@@ -8,7 +8,7 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity/event.entity';
-import { COFFEE_BRANDS, COFFEE_BRANDS2 } from './coffees.constants';
+import { COFFEE_BRANDS, COFFEE_BRANDS2, COFFEE_BRANDS3 } from './coffees.constants';
 
 
 @Injectable()
@@ -28,10 +28,13 @@ export class CoffeesService {
 		@Inject(COFFEE_BRANDS)
 		private readonly coffeeBrands: string[],
 		@Inject(COFFEE_BRANDS2)
-		private readonly coffeeBrands2: string[]
+		private readonly coffeeBrands2: string[],
+		@Inject(COFFEE_BRANDS3)
+		private readonly coffeeBrands3: string[]
 	) {
 		console.log({ coffeeBrands });
 		console.log({ coffeeBrands2 });
+		console.log({ coffeeBrands3 });
 	}
 
 	findAll(paginationQuery: PaginationQueryDto) {

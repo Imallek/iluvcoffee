@@ -6,7 +6,8 @@ import { Coffee } from './entities/coffee.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flavor } from './entities/flavor.entity';
 import { Event } from 'src/events/entities/event.entity/event.entity';
-import { COFFEE_BRANDS, COFFEE_BRANDS2 } from './coffees.constants';
+import { COFFEE_BRANDS, COFFEE_BRANDS2, COFFEE_BRANDS3 } from './coffees.constants';
+import { Connection } from 'typeorm';
 
 class MockCoffeeService { }
 
@@ -45,6 +46,14 @@ export class CoffeeBrandsFactory {
 		{
 			provide: COFFEE_BRANDS2,
 			useFactory: (brandsFactory: CoffeeBrandsFactory) => brandsFactory.create(),
+			inject: [CoffeeBrandsFactory]
+		},
+		{
+			provide: COFFEE_BRANDS3,
+			useFactory: async (connection: Connection): Promise<string[]> => {
+				const coffeebrands = await Promise.resolve(['buddy brew', 'nescafe']);
+				return coffeebrands;
+			},
 			inject: [CoffeeBrandsFactory]
 		}
 	],
