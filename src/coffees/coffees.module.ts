@@ -7,12 +7,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Flavor } from './entities/flavor.entity';
 import { Event } from 'src/events/entities/event.entity/event.entity';
 
+class MockCoffeeService { }
 @Module({
 	imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
 	providers: [{
 		provide: CoffeesService,
 		useClass: CoffeesService,
-	}],
+	},
+		/**
+		{
+			provide: CoffeesService,
+			useValue: new MockCoffeeService(),
+			// Now whenever the CoffeeService token is resolved, our MockCoffeeService class would be provided by Dependency injection
+		}
+		 */
+	],
 	controllers: [CoffeesController],
 	exports: [CoffeesService]
 })
