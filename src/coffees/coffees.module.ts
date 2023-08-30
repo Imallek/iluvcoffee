@@ -37,7 +37,8 @@ export class CoffeeBrandsFactory {
 		 */
 		{
 			provide: COFFEE_BRANDS,
-			useValue: ['buddy brew', 'nescafe']
+			useValue: ['buddy brew', 'nescafe'],
+			// scope: Scope.TRANSIENT   can set scope like this
 		},
 		{
 			provide: ConfigService,

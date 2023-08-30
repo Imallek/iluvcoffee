@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Connection, Repository } from 'typeorm';
@@ -11,7 +11,22 @@ import { Event } from 'src/events/entities/event.entity/event.entity';
 import { COFFEE_BRANDS, COFFEE_BRANDS2, COFFEE_BRANDS3 } from './coffees.constants';
 
 
-@Injectable()
+@Injectable()			// @Injectable() with no arguments Equivalent to @Injectable({scope: Scope.DEFAULT}) // with default being Singleton scope
+/**
+ Other scope are Transient and Request_Scoped
+ Transient ({ scope: Scope.TRANSIENT }) providers are not shared accross consumers, Each consumer that injects a Transient provider, will receive a new 
+ dedicated instance of that provider
+
+ Request_Scoped ({scope: Scope.REQUEST}) provides a new instance of provider exclusively for each request, instance is automatically garbage collected after
+ the request has completed the processing
+ In NEST scopes bubble up the injection chain, This means that if coffee controller depends upon the coffeeservice which is request scoped, the coffeecontroller implicitly 
+ becomes the request scoped as well
+ In REQUEST scoped providers, can inject the original request object, to get the cookies, headers etc as follows 
+ constructor(@Inject(REQUEST) private readonly request: Request)
+ we can do above thing in coffeecontroller and coffeeservice, as we discussed that in NEST scopes bubble up the injection chain, so coffeecontroller is also request scoped
+ 
+ Making a provider request scoped effects performance, normally scope should be singleton unless it MUST be some other scope
+ */
 export class CoffeesService {
 	/**
 	 * 
