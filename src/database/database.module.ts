@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
-import { createConnection } from 'typeorm';
+import { DynamicModule, Module } from '@nestjs/common';
+import { ConnectionOptions, createConnection } from 'typeorm';
 
 @Module({
 	/**
@@ -10,13 +10,23 @@ import { createConnection } from 'typeorm';
 	 What if another application wants to use this module but wants to use different port?
 	 Using Nest module dynamic features, we can let importing module use an API to configure the options when this module is imported
 	 */
-	providers: [{
-		provide: 'CONNECTION',
-		useValue: createConnection({
-			type: 'postgres',
-			host: 'localhost',
-			port: 5432
-		})
-	}]
+	// providers: [{
+	// 	provide: 'CONNECTION',
+	// 	useValue: createConnection({
+	// 		type: 'postgres',
+	// 		host: 'localhost',
+	// 		port: 5432
+	// 	})
+	// }]
 })
-export class DatabaseModule { }
+export class DatabaseModule {
+	static register(options: ConnectionOptions): DynamicModule {
+		return {
+			module: DatabaseModule,
+			providers: [{
+				provide: 'CONNECTION',
+				useValue: createConnection(options)
+			}]
+		}
+	}
+}
