@@ -28,7 +28,11 @@ async function bootstrap() {
   // as this exception filter dont have any provider dependency we can add it here in main.ts file
   app.useGlobalFilters(new HttpExceptionFilter())
 
-  app.useGlobalGuards(new ApiKeyGuard())
+  // Not registering it here because it has a constructor that takes 2 dependencies, 
+  // Registering it here is outside of any NestJs module context, so we cannot benefit from DI
+  // I have made another common module and registered it there so that DI could work and 
+  // dependencies in the constructor could be injected
+  // app.useGlobalGuards(new ApiKeyGuard())
   await app.listen(3001);
 }
 bootstrap();
