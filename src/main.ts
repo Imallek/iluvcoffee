@@ -2,6 +2,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,6 +23,9 @@ async function bootstrap() {
       enableImplicitConversion: true
     }
   }));
+
+  // as this exception filter dont have any provider dependency we can add it here in main.ts file
+  app.useGlobalFilters(new HttpExceptionFilter())
   await app.listen(3001);
 }
 bootstrap();
