@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 /**
  We can use pipes on specific controller as well
@@ -19,6 +20,7 @@ export class CoffeesController {
 	 Pipes can also be method scope as following
 	 */
 	// @UsePipes(ValidationPipe)
+	@Public()
 	@Get()
 	findAll(@Query() paginationQuery: PaginationQueryDto) {
 		const { limit, offset } = paginationQuery;
