@@ -5,6 +5,7 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { Public } from 'src/common/decorators/public.decorator';
+import { resolve } from 'path';
 
 /**
  We can use pipes on specific controller as well
@@ -22,8 +23,9 @@ export class CoffeesController {
 	// @UsePipes(ValidationPipe)
 	@Public()
 	@Get()
-	findAll(@Query() paginationQuery: PaginationQueryDto) {
+	async findAll(@Query() paginationQuery: PaginationQueryDto) {
 		const { limit, offset } = paginationQuery;
+		await new Promise((res, rej) => setTimeout(resolve, 5000));
 		return this.coffeesService.findAll(paginationQuery);
 	}
 
