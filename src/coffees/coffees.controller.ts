@@ -7,6 +7,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/paginati
 import { Public } from 'src/common/decorators/public.decorator';
 import { resolve } from 'path';
 import { ParseIntPipe } from 'src/common/pipes/parse-int/parse-int.pipe';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
 
 /**
  We can use pipes on specific controller as well
@@ -24,7 +25,8 @@ export class CoffeesController {
 	// @UsePipes(ValidationPipe)
 	@Public()
 	@Get()
-	async findAll(@Query() paginationQuery: PaginationQueryDto) {
+	async findAll(@Protocol('https') protocol: string, @Query() paginationQuery: PaginationQueryDto) {
+		console.log({ protocol });
 		const { limit, offset } = paginationQuery;
 		return this.coffeesService.findAll(paginationQuery);
 	}
