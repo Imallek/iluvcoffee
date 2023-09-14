@@ -55,7 +55,6 @@ describe('CoffeesService', () => {
         const coffeeId = '1';
 
         coffeeRepository.findOne.mockReturnValue(undefined);
-
         try {
           await service.findOne(coffeeId);
         } catch (error) {
