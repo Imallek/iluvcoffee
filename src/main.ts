@@ -7,7 +7,11 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    forbidNonWhitelisted: true
+    forbidNonWhitelisted: true,
+    transformOptions: {
+      // With this option set, we do not have to specify the types with type decorator in the dto
+      enableImplicitConversion: true
+    }
   }));
   await app.listen(3001);
 }
